@@ -29,4 +29,7 @@ app.UseHttpsRedirection();
 
 app.Run();
 
+<<<<<<< HEAD
 public partial class Program { }
+=======
+>>>>>>> main

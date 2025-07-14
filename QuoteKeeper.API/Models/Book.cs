@@ -5,6 +5,7 @@ namespace QuoteKeeper.API.Models
 {
     public class Book
     {
+
         [Key]
         public int Id { get; set; }
 
@@ -23,6 +24,7 @@ namespace QuoteKeeper.API.Models
         [Required]
         [MaxLength(250)]
         public string Description { get; set; } = null!;
+
 
         public DateTime PublishedDate { get; set; }
     }
