@@ -24,19 +24,9 @@ namespace QuoteKeeper.API.Models
         [Required]
         [MaxLength(100)]
         public string LastName { get; set; } = null!;
-<<<<<<< HEAD
+
         public ICollection<Quote> Quotes { get; set; } = new List<Quote>();
         public ICollection<Book> Books { get; set; } = new List<Book>();
         public ICollection<UserFavoriteQuote> FavoriteQuotes { get; set; } = new List<UserFavoriteQuote>();
-
-
-
-=======
-        public ICollection<Quote> Quotes;
-        public ICollection<Book> Books;
-        public ICollection<UserFavoriteQuote> FavoriteQuotes { get; set; } = new List<UserFavoriteQuote>();
-
-
->>>>>>> main
     }
 }

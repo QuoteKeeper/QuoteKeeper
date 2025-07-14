@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using QuoteKeeper.API.Data;
 using QuoteKeeper.API.Models;
@@ -25,11 +24,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
-
 app.Run();
 
-<<<<<<< HEAD
 public partial class Program { }
-=======
->>>>>>> main
