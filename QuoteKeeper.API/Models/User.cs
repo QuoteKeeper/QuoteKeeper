@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuoteKeeper.API.Models
 {
-    [Table("users")]
+
     public class User
     {
         [Key]
