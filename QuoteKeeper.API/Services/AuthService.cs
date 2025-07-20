@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using QuoteKeeper.API.Config;
 using Microsoft.Extensions.Options;
+using QuoteKeeper.API.Models;
 
 namespace QuoteKeeper.API.Services
 {
@@ -14,13 +15,17 @@ namespace QuoteKeeper.API.Services
         {
             _jwtSettings = jwtSettings.Value;
         }
-        public string GenerateToken(string username)
+        public string GenerateUserToken(User user)
         {
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+        new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim("FirstName", user.FirstName),
+        new Claim("LastName", user.LastName)
+    };
+
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -33,7 +38,7 @@ namespace QuoteKeeper.API.Services
                 signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
-         }
-        
+        }
+
     }
 }

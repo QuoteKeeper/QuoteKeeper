@@ -5,7 +5,7 @@ using QuoteKeeper.API.Data;
 using QuoteKeeper.API.Models;
 using QuoteKeeper.API.Config;
 using QuoteKeeper.API.Extensions;
-
+using QuoteKeeper.API.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -27,12 +27,19 @@ builder.Services.AddOptions<JwtSettings>()
                config.ExpiresInMinutes > 0;
     }, "JwtSettings validation failed.");
 
-    var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
-    builder.Services.AddJwtAuthentication(jwtSettings);
+var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
+builder.Services.AddJwtAuthentication(jwtSettings);
 
 builder.Services.AddCorsPolicy();
 builder.Services.AddPasswordHasher();
+builder.Services.AddAuthorization();
+builder.Services.AddAuthorizationPolicies();
 
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddControllers();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 
@@ -45,9 +52,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowFrontend");
+app.MapControllers();
+
 
 app.Run();
 

@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
+using QuoteKeeper.API.Extensions;
+using QuoteKeeper.API.Models;
 
 namespace QuoteKeeper.API.Extensions
 {
@@ -7,7 +9,7 @@ namespace QuoteKeeper.API.Extensions
     {
         public static IServiceCollection AddPasswordHasher(this IServiceCollection services)
         {
-            services.AddScoped<IPasswordHasher<object>, PasswordHasher<object>>();
+            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             return services;
         }
     }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using QuoteKeeper.API.Config;
 using System.Text;
+using QuoteKeeper.API.Extensions;
 
 namespace QuoteKeeper.API.Extensions
 {

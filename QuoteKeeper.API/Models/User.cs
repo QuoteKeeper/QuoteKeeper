@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using System.Data;
+using QuoteKeeper.API.Models;
 namespace QuoteKeeper.API.Models
 {
 
@@ -15,7 +16,7 @@ namespace QuoteKeeper.API.Models
 
         [Required]
         [MaxLength(100)]
-        public string Password { get; set; } = null!;
+        public string PasswordHash { get; set; } = null!;
 
         [Required]
         [MaxLength(100)]
@@ -24,6 +25,7 @@ namespace QuoteKeeper.API.Models
         [Required]
         [MaxLength(100)]
         public string LastName { get; set; } = null!;
+
 
         public ICollection<Quote> Quotes { get; set; } = new List<Quote>();
         public ICollection<Book> Books { get; set; } = new List<Book>();

@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using QuoteKeeper.API.Extensions;
 
 namespace QuoteKeeper.API.Extensions
 {
