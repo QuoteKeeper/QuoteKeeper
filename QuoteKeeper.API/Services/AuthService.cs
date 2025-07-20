@@ -5,6 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using QuoteKeeper.API.Config;
 using Microsoft.Extensions.Options;
 using QuoteKeeper.API.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Reflection.Metadata.Ecma335;
 
 namespace QuoteKeeper.API.Services
 {
@@ -38,6 +40,15 @@ namespace QuoteKeeper.API.Services
                 signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+
+        // TO Login verify Password 
+        public bool VerifyPassword(User user, string password, IPasswordHasher<User> passwordHasher)
+        {
+            var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+            return result == PasswordVerificationResult.Success;
+
         }
 
     }

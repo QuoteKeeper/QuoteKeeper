@@ -65,6 +65,40 @@ namespace QuoteKeeper.API.Controllers
                     Email = user.Email
                 }
             });
+
+        }
+
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            Console.WriteLine("Login endpoint was hit");
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+            if (user == null)
+            {
+                return Unauthorized("Invalid email or password.");
+
+            }
+            var isValid = _authService.VerifyPassword(user, request.Password, _passwordHasher);
+            if (!isValid)
+            {
+                return Unauthorized("Invalid email or password.");
+
+            }
+            var token = _authService.GenerateUserToken(user);
+            return Ok(new AuthResponse
+            {
+                Token = token,
+                Message = "Login successful.",
+                User = new AuthUserDto
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName
+                }
+            });
         }
     }
 }
