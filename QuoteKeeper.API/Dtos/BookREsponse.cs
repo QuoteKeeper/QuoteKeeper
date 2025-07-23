@@ -10,5 +10,7 @@ namespace QuoteKeeper.API.Dtos
         public string Author { get; set; } = null!;
         public string Description { get; set; } = null!;
         public DateTime PublishedDate { get; set; }
+        public int UserId { get; set; }
+        public string UserFullName { get; set; } = null!;
     }
 }

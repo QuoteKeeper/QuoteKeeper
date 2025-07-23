@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using Microsoft.EntityFrameworkCore;
 namespace QuoteKeeper.API.Models
 {
+    [Index(nameof(Title), IsUnique = true)]
+    [Index(nameof(BarCode), IsUnique = true)]
     public class Book
     {
 
@@ -22,10 +24,15 @@ namespace QuoteKeeper.API.Models
         public string Author { get; set; } = null!;
 
         [Required]
-        [MaxLength(250)]
+        [MaxLength(2500)]
         public string Description { get; set; } = null!;
 
 
         public DateTime PublishedDate { get; set; }
+        public int UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public User User { get; set; } = null!;
+
     }
 }

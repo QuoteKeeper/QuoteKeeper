@@ -2,10 +2,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using QuoteKeeper.API.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace QuoteKeeper.API.Dtos
 {
+    [Index(nameof(Title), IsUnique = true)]
+    [Index(nameof(BarCode), IsUnique = true)]
     public class BookRequest
     {
         [Required]
@@ -21,7 +24,7 @@ namespace QuoteKeeper.API.Dtos
         public string Author { get; set; } = null!;
 
         [Required]
-        [MaxLength(250)]
+        [MaxLength(2500)]
         public string Description { get; set; } = null!;
 
         [Required]

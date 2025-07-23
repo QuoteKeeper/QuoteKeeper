@@ -15,7 +15,7 @@ namespace QuoteKeeper.API.Dtos
         public string FirstName { get; set; } = null!;
 
         public string LastName { get; set; } = null!;
-        public string Message { get; set; }
+        
 
         public List<QuoteResponse> Quotes { get; set; } = new();
     }

@@ -14,6 +14,6 @@ namespace QuoteKeeper.API.Config
         public string Audience { get; set; } = string.Empty;
 
         [Range(1, 1440, ErrorMessage = "ExpiresInMinutes must be between 1 and 1440.")]
-        public int ExpiresInMinutes { get; set; } = 60;
+        public int ExpiresInMinutes { get; set; } = 300;
     }
 }

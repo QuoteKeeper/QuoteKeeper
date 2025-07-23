@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using QuoteKeeper.API.Config;
 using QuoteKeeper.API.Data;
 using QuoteKeeper.API.Models;
-using QuoteKeeper.API.Config;
 using QuoteKeeper.API.Extensions;
 using QuoteKeeper.API.Services;
+using QuoteKeeper.API.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -32,7 +32,7 @@ builder.Services.AddJwtAuthentication(jwtSettings);
 
 builder.Services.AddCorsPolicy();
 builder.Services.AddPasswordHasher();
-builder.Services.AddAuthorization();
+//builder.Services.AddAuthorization();
 builder.Services.AddAuthorizationPolicies();
 
 builder.Services.AddScoped<AuthService>();
@@ -40,6 +40,11 @@ builder.Services.AddControllers();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+
+
+//builder.Services.AddSingleton<IBookService, BookService>();
+builder.Services.AddScoped<IBookService, BookService>();
+
 
 var app = builder.Build();
 
@@ -50,11 +55,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
-
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<CustomUnauthorizedMiddleware>();
 app.MapControllers();
 
 
