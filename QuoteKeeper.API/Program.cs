@@ -32,9 +32,7 @@ builder.Services.AddJwtAuthentication(jwtSettings);
 
 builder.Services.AddCorsPolicy();
 builder.Services.AddPasswordHasher();
-//builder.Services.AddAuthorization();
 builder.Services.AddAuthorizationPolicies();
-
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddControllers();
 
@@ -42,7 +40,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 
-//builder.Services.AddSingleton<IBookService, BookService>();
+
 builder.Services.AddScoped<IBookService, BookService>();
 
 
@@ -58,9 +56,20 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
+app.UseStatusCodePages(async context =>
+{
+    var response = context.HttpContext.Response;
+
+    if (response.StatusCode == StatusCodes.Status401Unauthorized)
+    {
+        response.ContentType = "application/json";
+        await response.WriteAsync("{\"message\": \"You must log in to perform this action.\"}");
+    }
+});
+
 app.UseAuthentication();
+// app.UseMiddleware<CustomUnauthorizedMiddleware>();
 app.UseAuthorization();
-app.UseMiddleware<CustomUnauthorizedMiddleware>();
 app.MapControllers();
 
 

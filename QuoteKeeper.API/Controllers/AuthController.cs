@@ -100,5 +100,13 @@ namespace QuoteKeeper.API.Controllers
                 }
             });
         }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+
+            return Ok(new { message = "You logged out." });
+        }
+
     }
 }
