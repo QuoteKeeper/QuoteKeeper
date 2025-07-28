@@ -5,6 +5,7 @@ using QuoteKeeper.API.Models;
 namespace QuoteKeeper.API.Models
 {
 
+    [Table("Users")]
     public class User
     {
         [Key]

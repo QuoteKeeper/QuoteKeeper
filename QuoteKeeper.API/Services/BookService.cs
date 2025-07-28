@@ -18,7 +18,10 @@ namespace QuoteKeeper.API.Services
 
         public IEnumerable<Book> GetAll()
         {
-            return _context.Books.ToList();
+            return _context.Books
+            .Include(b => b.User)
+            .AsNoTracking()
+            .ToList();
         }
         public Book? GetById(int id)
         {
@@ -34,14 +37,14 @@ namespace QuoteKeeper.API.Services
         .Any(b => b.Title.ToLower() == request.Title.ToLower());
 
             if (titleExists)
-                throw new InvalidOperationException("⚠️ عنوان الكتاب مستخدم مسبقًا.");
+                throw new InvalidOperationException("⚠️ The book title is already in use");
 
-            // التحقق من تكرار الباركود
+
             var barcodeExists = _context.Books
                 .Any(b => b.BarCode.ToLower() == request.BarCode.ToLower());
 
             if (barcodeExists)
-                throw new InvalidOperationException("⚠️ الباركود مستخدم مسبقًا.");
+                throw new InvalidOperationException("⚠️ The barcode is already in use.");
 
             var book = new Book
             {

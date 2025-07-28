@@ -48,7 +48,7 @@ namespace QuoteKeeper.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // 🔐 استخراج UserId من التوكن والتحقق من صحته
+
             var userIdClaim = User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier && int.TryParse(c.Value, out _));
 
@@ -92,10 +92,28 @@ namespace QuoteKeeper.API.Controllers
 
 
         [HttpGet]
-        public ActionResult<IEnumerable<Book>> GetAllBooks()
+        public ActionResult<IEnumerable<BookResponse>> GetAllBooks()
         {
-            var book = _bookService.GetAll();
-            return Ok(book);
+            var books = _bookService.GetAll();
+
+            foreach (var b in books)
+            {
+                Console.WriteLine($"DEBUG BookId: {b.Id}, User: {(b.User != null ? b.User.FirstName + " " + b.User.LastName : "NULL")}");
+            }
+            var response = books.Select(book => new BookResponse
+            {
+                Id = book.Id,
+                Title = book.Title,
+                BarCode = book.BarCode,
+                Author = book.Author,
+                Description = book.Description,
+                PublishedDate = book.PublishedDate,
+                UserId = book.UserId,
+                UserFullName = book.User != null ? $"{book.User.FirstName} {book.User.LastName}" : null
+
+
+            });
+            return Ok(response);
         }
         [Authorize]
         [HttpPut("{id}")]
@@ -107,7 +125,19 @@ namespace QuoteKeeper.API.Controllers
             var update = _bookService.Update(id, request);
             if (!update)
                 return NotFound();
-            return NoContent();
+
+            var updateBook = _bookService.GetById(id);
+            var response = new UpdateBookRequest
+            {
+                Id = updateBook.Id,
+                Title = updateBook.Title,
+                BarCode = updateBook.BarCode,
+                Author = updateBook.Author,
+                Description = updateBook.Description,
+                PublishedDate = updateBook.PublishedDate,
+
+            };
+            return Ok(response);
         }
 
         [Authorize]

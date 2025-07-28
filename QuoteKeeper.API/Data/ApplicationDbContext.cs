@@ -18,6 +18,11 @@ namespace QuoteKeeper.API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Book>()
+        .HasOne(b => b.User)
+        .WithMany(u => u.Books)
+        .HasForeignKey(b => b.UserId)
+        .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UserFavoriteQuote>()
                 .HasKey(ufq => new { ufq.UserId, ufq.QuoteId });

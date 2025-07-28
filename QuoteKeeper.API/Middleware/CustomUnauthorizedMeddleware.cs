@@ -12,20 +12,13 @@ namespace QuoteKeeper.API.Middleware
 
         public async Task Invoke(HttpContext context)
         {
-            context.Response.OnStarting(async () =>
-         {
-             if (context.Response.StatusCode == StatusCodes.Status401Unauthorized &&
-                 !context.Response.HasStarted)
-             {
-                 context.Response.ContentType = "application/json";
-                 var responseText = "{\"message\":\"You must log in to perform this action.\"}";
-                 var bytes = System.Text.Encoding.UTF8.GetBytes(responseText);
-                 context.Response.ContentLength = bytes.Length;
-                 await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
-             }
-         });
-
             await _next(context);
+
+            if (context.Response.StatusCode == StatusCodes.Status401Unauthorized)
+            {
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync("{\"message\":\"You must log in to perform this action.\"}");
+            }
         }
     }
 }
