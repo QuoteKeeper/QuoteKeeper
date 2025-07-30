@@ -19,17 +19,33 @@ namespace QuoteKeeper.API.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Book>()
-        .HasOne(b => b.User)
-        .WithMany(u => u.Books)
-        .HasForeignKey(b => b.UserId)
-        .OnDelete(DeleteBehavior.Restrict);
+           .HasOne(b => b.User)
+           .WithMany(u => u.Books)
+           .HasForeignKey(b => b.UserId)
+           .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<UserFavoriteQuote>()
-                .HasKey(ufq => new { ufq.UserId, ufq.QuoteId });
 
             modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email)
-                .IsUnique();
+                   .HasIndex(u => u.Email)
+                   .IsUnique();
+
+            modelBuilder.Entity<UserFavoriteQuote>()
+                .HasKey(f => new { f.UserId, f.QuoteId });
+
+
+            // Relation between User and UserFavoriteQuote
+            modelBuilder.Entity<UserFavoriteQuote>()
+            .HasOne(f => f.User)
+            .WithMany(u => u.FavoriteQuotes)
+            .HasForeignKey(f => f.UserId);
+
+            // Relation between Quote and UserFavoriteQuote
+            modelBuilder.Entity<UserFavoriteQuote>()
+            .HasOne(f => f.Quote)
+            .WithMany(q => q.FavoritedByUsers)
+            .HasForeignKey(f => f.QuoteId);
+
+
         }
     }
 }
