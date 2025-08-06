@@ -19,6 +19,7 @@ namespace QuoteKeeper.API.Models
         [Required]
 
         public int BookId { get; set; }
+      
         public Book Book { get; set; } = null!;
 
         [Required]

@@ -42,6 +42,8 @@ builder.Logging.AddConsole();
 
 
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IQuoteService, QuoteService>();
+
 
 
 var app = builder.Build();

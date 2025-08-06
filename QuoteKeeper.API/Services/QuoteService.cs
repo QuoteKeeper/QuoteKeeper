@@ -2,6 +2,8 @@ using QuoteKeeper.API.Data;
 using QuoteKeeper.API.Dtos;
 using QuoteKeeper.API.Models;
 using Microsoft.EntityFrameworkCore;
+using QuoteKeeper.API.Services;
+
 
 
 namespace QuoteKeeper.API.Services
@@ -16,6 +18,15 @@ namespace QuoteKeeper.API.Services
         }
         public QuoteResponse CreateQuote(QuoteRequest request, int userId)
         {
+            var duplicate = _context.Quotes.Any(q =>
+           q.Text == request.Text &&
+           q.BookId == request.BookId &&
+           q.UserId == userId);
+            if (duplicate)
+            {
+                return null;
+            }
+
             var quote = new Quote
             {
                 Text = request.Text,
@@ -66,13 +77,13 @@ namespace QuoteKeeper.API.Services
                 BookId = q.BookId,
                 BookTitle = q.Book.Title,
                 CreatedBy = q.User.FirstName,
-                FavoritedByUsers = q.FavoritedByUsers.Select(f => new QuoteFavoriteResponse
-                {
-                    QuoteId = q.Id,
-                    Text = q.Text,
-                    QuoteType = q.QuoteType,
-                    BookId = q.BookId
-                }).ToList()
+                /** FavoritedByUsers = q.FavoritedByUsers.Select(f => new QuoteFavoriteResponse
+                 {
+                     QuoteId = q.Id,
+                     Text = q.Text,
+                     QuoteType = q.QuoteType,
+                     BookId = q.BookId
+                 }).ToList()*/
 
             });
         }
@@ -115,6 +126,10 @@ namespace QuoteKeeper.API.Services
 
         public bool AddToFavorites(QuoteFavoriteRequest request)
         {
+            var quoteExists = _context.Quotes.Any(q => q.Id == request.QuoteId);
+            if (!quoteExists)
+                throw new Exception($"Quote with ID {request.QuoteId} does not exist.");
+
             var alreadyFavorited = _context.UserFavoriteQuotes
             .Any(f => f.UserId == request.UserId && f.QuoteId == request.QuoteId);
             if (alreadyFavorited)
@@ -143,6 +158,11 @@ namespace QuoteKeeper.API.Services
             _context.UserFavoriteQuotes.Remove(favorite);
             _context.SaveChanges();
             return true;
+        }
+
+        public int GetFavoriteCount(int quoteId)
+        {
+            return _context.UserFavoriteQuotes.Count(f => f.QuoteId == quoteId);
         }
 
 
