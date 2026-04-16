@@ -151,8 +151,22 @@ dotnet run
 
 ---
 
-##  API Testing
-* Postman
+## API Documentation (Postman)
+
+You can explore and test all available API endpoints using the Postman documentation:
+
+👉 : 
+https://documenter.getpostman.com/view/41126830/2sBXqCR4px
+
+### What’s included:
+
+* Complete list of endpoints  
+* Request & response examples  
+* Authentication flow (JWT)  
+* Required headers and parameters  
+* Books, quotes, and favorites workflows  
+
+This documentation makes it easy to test the API without needing a frontend.
 
 ---
 
